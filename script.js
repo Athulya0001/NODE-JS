@@ -1,44 +1,37 @@
-// async function handleSubmit(event) {
-//     event.preventDefault();
 
-//     const todo = document.getElementById('todo').value;
-//     try {
-//         const response =await fetch('http://localhost:3000/', {
-//             method:"POST",
-//             headers:{"Content-type": 'application/json'},
-//             body:JSON.stringify(todo)
-//         });
 
-//         if(!response.ok){
-//             console.log("Failed to send data, status: ", response.status)
-//         }
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-async function handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission
+    
+       async function handleSubmit(event) {
+    event.preventDefault();
 
     const todo = document.getElementById('todo').value;
+    console.log(todo,'from the form')
+
 
     try {
-        const response = await fetch('http://localhost:3000/', {
+        const response = await fetch('http://localhost:3000/add', {
             method: "POST",
-            headers: { "Content-Type": "text/plain" }, // Send as plain text
-            body: todo // Send raw string
+            headers: { "Content-Type": "application/json" }, // Corrected "application/JSON" to "application/json"
+            body: JSON.stringify( todo ) // Wrap todo in an object
         });
 
-        if (response.ok) {
-            const result = await response.text();
-            console.log("Response from server:", result);
-        } else {
-            console.error("Failed to send data. Status:", response.status);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const data = await response.json();
+        console.log(data);
+        
     } catch (error) {
-        console.error("Error occurred:", error);
+        console.error("Error:", error);
     }
 }
 
-document.getElementById('todo').addEventListener('submit', handleSubmit);
+    
+async function fetchData( ){
+    const response=await fetch('http://localhost:3000/getTodos',{
+        method:"GET"
+    })
+    
+
+}
