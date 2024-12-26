@@ -1,9 +1,16 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+// const http = require('http');
+// const fs = require('fs');
+// const path = require('path');
+
+// const dummy = require('./dummy.js');
+
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import {todoData} from './todo.js'
 
 
-const jsonPath = path.join(__dirname,"todo.json");
+// const jsonPath = path.join(__dirname,"todo.json");
 
 
 async function readJsonFile(){
@@ -17,7 +24,7 @@ async function readJsonFile(){
 
 
 async function addData(todo){
-    await fs.writeFileSync(jsonPath,JSON.stringify(todo))
+    await fs.writeFileSync(jsonPath,JSON.stringify(todo, null, 2))
 
 }
 
@@ -65,7 +72,7 @@ const server = http.createServer((request, response) => {
            const newTodo={todo:JSON.parse(body)}
             console.log(newTodo,'new todo ===================')
             todos.push(newTodo)
-            console.log(todos,"======================")
+    //         console.log(todos,"======================")
     
     await addData(todos)
         });
