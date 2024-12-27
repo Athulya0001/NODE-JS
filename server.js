@@ -7,10 +7,14 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import {todoData} from './todo.js'
+import {fileURLToPath} from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
 
-// const jsonPath = path.join(__dirname,"todo.json");
+const __dirname = path.dirname(__filename);
+ 
+
+const jsonPath = path.join(__dirname,"todo.json");
 
 
 async function readJsonFile(){
@@ -76,6 +80,13 @@ const server = http.createServer((request, response) => {
     
     await addData(todos)
         });
+    }
+    else if(request.url ==='/getTodos' && request.method==='GET'){
+        fs.readFile(jsonPath, 'utf-8', (err, data)=>{
+            console.log(data);
+            response.writeHead(200, {message:"getTodos path"})
+            response.end(data)
+        })
     }
      else {
         response.writeHead(404, { 'Content-Type': 'text/plain' });
