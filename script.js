@@ -7,8 +7,8 @@ async function handleSubmit(event) {
   try {
     const response = await fetch("http://localhost:3000/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }, // Corrected "application/JSON" to "application/json"
-      body: JSON.stringify({todo}), // Wrap todo in an object
+      headers: { "Content-Type": "application/json" }, 
+      body: JSON.stringify({todo}),
     });
 
     if (!response.ok) {
@@ -41,9 +41,21 @@ async function fetchData() {
     
     listContent.innerHTML= "";
     todoData.map((data,index)=>{
-        console.log(data.todo)
+        const dataTodo = data.todo;
+        console.log(dataTodo, "data.todo")
+        const idTodo = data.id;
+        console.log(idTodo,"data.id")
         const listItems = document.createElement('li');
-        listItems.textContent = data.todo;
+        const listSpan = document.createElement('span');
+        const listPara = document.createElement('p');
+
+        
+        listSpan.textContent = `todo: ${dataTodo}`;
+        listItems.appendChild(listSpan);
+        if(idTodo!== undefined){
+          listPara.textContent = `ID: ${idTodo}`;
+          listItems.appendChild(listPara);
+        }
         listContent.appendChild(listItems);
     })
   }

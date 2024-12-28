@@ -71,7 +71,9 @@ const server = http.createServer(async (request, response) => {
         const todos = await readJsonFile();
         const parsedBody = JSON.parse(body);
         console.log(parsedBody, "parsed body")
-        const newTodo = { todo: parsedBody.todo };
+        const newTodo = { todo: parsedBody.todo,
+          id: Date.now()
+        };
         todos.push(newTodo);
 
         await addData(todos);
