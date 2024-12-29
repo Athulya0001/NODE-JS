@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const jsonPath = path.join(__dirname, "todo.json");
+const jsonUserPath = path.join(__dirname, "user.json");
 
 async function readJsonFile() {
   try {
@@ -29,6 +30,27 @@ async function readJsonFile() {
 async function addData(todo) {
   try {
     await fs.writeFile(jsonPath, JSON.stringify(todo, null, 2));
+  } catch (error) {
+    console.error("Error writing to JSON file:", error);
+  }
+}
+
+async function readUserFile() {
+  try {
+    if (!(await fs.stat(jsonUserPath).catch(() => false))) {
+      await fs.writeFile(jsonUserPath, JSON.stringify([]));
+    }
+    const userContent = await fs.readFile(jsonUserPath, "utf-8");
+    return JSON.parse(userContent);
+  } catch (error) {
+    console.error("Error reading JSON file:", error);
+    return [];
+  }
+}
+
+async function addUserData(user) {
+  try {
+    await fs.writeFile(jsonUserPath, JSON.stringify(user, null, 2));
   } catch (error) {
     console.error("Error writing to JSON file:", error);
   }
@@ -85,7 +107,10 @@ const server = http.createServer(async (request, response) => {
         response.end(JSON.stringify({ message: "Failed to add todo", error }));
       }
     });
-  } else if (request.url === "/getTodos" && request.method === "GET") {
+  }else if(request.url === "/addUser" && request.method === "POST"){
+    // addUser path for usermanagement
+  } 
+  else if (request.url === "/getTodos" && request.method === "GET") {
     try {
       const data = await readJsonFile();
       response.writeHead(200, { "Content-Type": "application/json" });

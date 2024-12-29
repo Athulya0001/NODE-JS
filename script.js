@@ -1,7 +1,7 @@
 async function handleSubmit(event) {
   event.preventDefault();
 
-  const todo = document.getElementById("todo").value;
+  let todo = document.getElementById("todo").value;
   console.log(todo, "from the form");
 
   try {
@@ -17,7 +17,7 @@ async function handleSubmit(event) {
       const data = await response.json();
       console.log(data,"Response after adding");
 
-      document.getElementById("todo").value = "";
+      todo.value = "";
 
       fetchData();
     }
