@@ -47,8 +47,8 @@ async function fetchUserData() {
 
     userData.map((user, index) => {
       const listItem = document.createElement("li");
-      const dataName = user.fullName;
-      const dataEmail = user.emailId;
+      const dataName = user.Fullname;
+      const dataEmail = user.Email;
       const dataPassword = user.password;
       const name = document.createElement('p');
       const email = document.createElement('p');
