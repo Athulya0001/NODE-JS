@@ -36,7 +36,7 @@ async function fetchUserData() {
     const response = await fetch("http://localhost:3000/getUsers", { method: "GET" });
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      console.log("Network response was not ok");
     }
 
     const userData = await response.json();
@@ -45,21 +45,52 @@ async function fetchUserData() {
     const userList = document.getElementById("userList");
     userList.innerHTML = "";
 
-    userData.map((user, index) => {
+    userData.forEach((user, index) => {
       const listItem = document.createElement("li");
-      const dataName = user.Fullname;
-      const dataEmail = user.Email;
-      const dataPassword = user.password;
+
       const name = document.createElement('p');
       const email = document.createElement('p');
       const password = document.createElement('p');
+      const dlt = document.createElement('button');
+      dlt.textContent = 'Delete';
+      dlt.style.backgroundColor = 'rgb(137, 10, 10)';
+      dlt.style.color = 'rgb(255, 255, 255)';
+      dlt.style.border = 'none';
+      const edit = document.createElement('button');
+      edit.textContent = 'Edit';
+      edit.style.backgroundColor = 'rgb(27, 27, 106)';
+      edit.style.color = 'rgb(255, 255, 255)';
+      edit.style.border = 'none';
 
-      name.textContent = `Fullname : ${dataName}`;
-      email.textContent = `Email : ${dataEmail}`;
-      password.textContent = `Password: ${dataPassword}`;
+      dlt.addEventListener("click", async function () {
+        try {
+          const response = await fetch(`http://localhost:3000/deleteUser/${user._id}`, {
+            method: "DELETE",
+          });
+          console.log(response, "response")
+
+          if (!response.ok) {
+            console.log("Failed to delete user");
+          }
+
+          const data = await response.json();
+          console.log(data.message);
+
+          fetchUserData();
+        } catch (error) {
+           console.error("Error deleting user: ", error);
+        }
+      });
+
+
+      name.textContent = `Fullname : ${user.Fullname}`;
+      email.textContent = `Email : ${user.Email}`;
+      password.textContent = `Password: ${user.password}`;
       listItem.appendChild(name);
       listItem.appendChild(email);
       listItem.appendChild(password);
+      listItem.appendChild(dlt);
+      listItem.appendChild(edit);
       userList.appendChild(listItem);
     });
   } catch (error) {

@@ -4,90 +4,72 @@
 }
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     background-color: beige;
-    height: 100vh;
+    /* height: 100vh; */
 }
 .container {
-    background-color: rgb(245, 204, 3);
-    width: 50%;
-    height: 70%;
-    padding: 5px;
     margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 2px solid rgb(13, 9, 65);
+}
+form {
+    border: 2px solid rgb(3, 3, 53);
     border-radius: 5px;
-    box-shadow: rgb(13, 9, 65) 0px 20px 30px -10px;
-    position: relative;
+    margin-bottom: 15px; 
+    padding: 15px;
+    width: 100%; 
+    max-width: 500px;
 }
-.input-section {
+h1 {
+    text-align: center;
+    margin-top: 6px;
+    padding: 15px;
+}
+input {
+    padding: 4px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 60px;
-    gap: 10px;
 }
-.input-section input {
-    width: 65%;
-    padding: 3px;
-    /* border: 1px solid rgb(13, 9, 65); */
-    border: none;
-    box-shadow: 1px 1px 1px rgb(13, 9, 65);
-    background-color: whitesmoke;
+label {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 5px; 
+}
+button {
+    padding: 5px;
+    padding-inline: 15px;
     border-radius: 3px;
+    border: 1px solid;
+    cursor: pointer;
+    margin-top: 10px;
 }
-.input-section button {
-    padding: 3px;
-    background-color: rgb(52, 248, 35);
-    border: none;
-    box-shadow: 1px 1px 2px rgb(13, 9, 65);
-    /* margin-left: 5px; */
-    border-radius: 3px;
-}
-ul {
+#userList {
+    margin: auto;
     list-style: none;
-    padding: 3px;
-    width: 70%;
+    padding: 0;
+    margin-top: 20px;
+    width: 100%;
+    /* max-width: 500px; */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 100px;
     gap: 10px;
 }
 li {
-    background-color: rgb(234, 230, 230);
-    padding: 3px;
-    width: 100%;
-    gap: 10px;
+    padding: 10px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgb(245, 204, 3);
+    flex-direction: column;
+    background-color: rgb(210, 177, 11);
     border-radius: 3px;
     border: none;
+    /* width: 100%; */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-li span {
-    padding: 3px;
-    background-color: rgb(13, 9, 65);
-    width: 100%;
-    box-shadow: 1px 1px 2px whitesmoke;
-    border-radius: 3px;
-    color: white;
-}
-li button {
-    background-color: rgb(225, 5, 5);
-    padding: 3px;
-    border-radius: 3px;
-    border: none;
-    box-shadow: 1px 1px 1px whitesmoke;
+li p {
+    margin: 5px 0; 
+    color: rgb(11, 11, 61);
+    font-size: 16px;
 }

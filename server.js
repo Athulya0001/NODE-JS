@@ -9,7 +9,10 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import { MongoClient } from "mongodb";
-import { constants } from "buffer";
+import { ObjectId } from "mongodb";
+
+// import { constants } from "buffer";
+
 
 const mongoUri = "mongodb://127.0.0.1:27017/";
 const dbName = "userManage";
@@ -72,13 +75,13 @@ async function addData(todo) {
 //   }
 // }
 
-async function addUserData(users) {
-  try {
-    await fs.writeFile(jsonUserPath, JSON.stringify(users, null, 2));
-  } catch (error) {
-    console.error("Error writing to JSON file:", error);
-  }
-}
+// async function addUserData(users) {
+//   try {
+//     await fs.writeFile(jsonUserPath, JSON.stringify(users, null, 2));
+//   } catch (error) {
+//     console.error("Error writing to JSON file:", error);
+//   }
+// }
 
 const server = http.createServer(async (request, response) => {
   console.log(request.method, "Request Method");
@@ -125,7 +128,17 @@ const server = http.createServer(async (request, response) => {
       response.writeHead(500, { "Content-Type": "text/plain" });
       response.end("Error loading script");
     }
-  } else if (request.url === "/add" && request.method === "POST") {
+  } else if (request.url === "/style.css" && request.method === "GET") {
+    try {
+      const data = await fs.readFile('./style.css', "utf-8");
+      response.writeHead(200, { "Content-Type": "text/css" });
+      response.end(data);
+    } catch (err) {
+      response.writeHead(500, { "Content-Type": "text/plain" });
+      response.end("Error loading script");
+    }
+  }
+  else if (request.url === "/add" && request.method === "POST") {
     let body = "";
 
     request.on("data", (chunk) => {
@@ -194,6 +207,9 @@ const server = http.createServer(async (request, response) => {
         // users.push(newUserData);
 
         // await addUserData(users);
+        response.writeHead(201, { "Content-Type": "application/json" });
+        response.end(JSON.stringify({ message: "User added successfully" }));
+
       } catch (error) {
         console.error("Error adding user:", error);
         response.writeHead(500, { "Content-Type": "application/json" });
@@ -208,16 +224,39 @@ const server = http.createServer(async (request, response) => {
   } else if (request.url === "/getUsers" && request.method === "GET") {
     try {
       // const dataUser = await readUserFile()
-      const users = await runMongoDb();
+      const users = await userCollection.find({}).toArray();
       response.writeHead(200, { "Content-Type": "application/json" });
-      response.end(JSON.stringify(users));
+      response.end(JSON.stringify(users, null, 2));
     } catch (err) {
-      // response.writeHead(500, { "Content-Type": "application/json" });
+      response.writeHead(500, { "Content-Type": "application/json" });
       response.end(
         JSON.stringify({ message: "Failed to fetch user data", error: err })
       );
     }
-  } else {
+  }else if (request.url==="/deleteUser" && request.method === "DELETE") {
+    const userId = request.url.split("/deleteUser/")[1];
+    const userD = await userCollection.findOne({userId}).toArray();
+    console.log("Selected user:" , userId)
+
+    try {
+      if (!userId) {
+        response.writeHead(400, { "Content-Type": "application/json" });
+        response.end(JSON.stringify({ message: "User ID is required" }));
+        return;
+      }
+
+      const result = await userCollection.deleteOne({ _id: new ObjectId(userId)});
+
+      if (result.deletedCount === 0) {
+        console.log("User not found")
+      } else {
+        console.log("Deleted User Successfully")
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  }
+   else {
     response.writeHead(404, { "Content-Type": "text/plain" });
     response.end("404 Not Found");
   }
